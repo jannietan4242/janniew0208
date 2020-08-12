@@ -6,6 +6,7 @@
             $this->load->database();
         }
 
+        // soft delete
         public function delete($where){
             $this->db->where($where);
             $this->db->update("album",[
@@ -14,21 +15,32 @@
             ]);
         }
 
+        // update data
         public function update($where,$update_sql){
             $this->db->where($where);
             $this->db->update("album",$update_sql);
         }
 
+        // insert data
         public function insert($data_sql){
-            $this->db->where($where);
-            $this->db->update("album",$update_sql);
+           
+            $this->db->insert('album',$data_sql);
         }
 
-        public function get_where(){
+        // to get multiple data
+        public function get_where($where){
             $this->db->select("*");
-            $this->db->where([]);
+            $this->db->where($where);
             $query = $this->db->get("album");
             return $query->result_array();
+        }
+
+        // to get only one data
+        public function getOne($where){
+            $this->db->select("*");
+            $this->db->where($where);
+            $query = $this->db->get("album");
+            return $query->row_array();
         }
     }
 
