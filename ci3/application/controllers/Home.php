@@ -1,30 +1,71 @@
 <?php
 class Home extends CI_Controller {
+
+    private $data = [];
+
     public function homepage() {
 
         $this->load->model("Album_model");
         $albumList = $this->Album_model->get_where();
-
-        $data = [];
-        $data['albumList'] = $albumList;
-
+        $this->data['albumList'] = $albumList;
         $this->load->view("header");
-        $this->load->view("homepage", $data);
+        $this->load->view("homepage", $this->data);
         $this->load->view("footer");
     }
 
-    public function detailpage($id=1) {
+    public function detailpage($id=1, $slug="", $page=1) {
 
         $this->load->model("Album_model");
         $detail = $this->Album_model->getOne([
             'id' => $id,
         ]);
+        $this->data['detail'] = $detail;
 
-        $data = [];
-        $data['detail'] = $detail;
+        $item_per_page = 5;
+        $start = ($page - 1) * $item_per_page;
+
+        $this->load->model("Saleslead_model");
+        $leadList = $this->Saleslead_model->fetch([
+            'album_id' => $id,
+            'is_deleted' => 0,
+        ], $start, $item_per_page);
+        $this->data['leadList'] = $leadList;
+
+        $total_rows = $this->Saleslead_model->total_record([
+            'album_id' => $id,
+            'is_deleted' => 0,
+        ]);
+
+        $this->load->library("mypagination");        
+        $this->data['pagination'] = $this->mypagination->getPagination(base_url('album/'.$id.'/'.$detail['title']), $total_rows, $item_per_page);
 
         $this->load->view("header");
-        $this->load->view("detailpage",$data);
+        $this->load->view("detailpage",$this->data);
+        $this->load->view("footer");
+    }
+
+    public function detailpage_submit(){
+
+        $album_id = $this->input->post("album_id", true);
+        $name = $this->input->post("name", true);
+        $email = $this->input->post("email", true);
+        $mobile = $this->input->post("mobile", true);
+
+        $this->load->model("Saleslead_model");
+
+        $this->Saleslead_model->insert([
+            'album_id' => $album_id,
+            'name' => $name,
+            'email' => $email,
+            'mobile' => $mobile,
+            'created_date' => date("Y-m-d H:i:s"),
+        ]);
+        redirect(base_url('thanks'));
+    }
+
+    public function thanks(){
+        $this->load->view("header");
+        $this->load->view("thanks");
         $this->load->view("footer");
     }
 
