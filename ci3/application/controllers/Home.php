@@ -13,10 +13,18 @@ class Home extends CI_Controller {
         $this->load->view("footer");
     }
 
-    public function detailpage() {
+    public function detailpage($id=1) {
+
+        $this->load->model("Album_model");
+        $detail = $this->Album_model->getOne([
+            'id' => $id,
+        ]);
+
+        $data = [];
+        $data['detail'] = $detail;
 
         $this->load->view("header");
-        $this->load->view("detailpage");
+        $this->load->view("detailpage",$data);
         $this->load->view("footer");
     }
 

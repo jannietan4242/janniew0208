@@ -28,7 +28,7 @@
         }
 
         // to get multiple data
-        public function get_where($where){
+        public function get_where($where=[]){
             $this->db->select("*");
             $this->db->where($where);
             $query = $this->db->get("album");
