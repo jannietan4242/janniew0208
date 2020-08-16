@@ -60,6 +60,10 @@ class Home extends CI_Controller {
             'mobile' => $mobile,
             'created_date' => date("Y-m-d H:i:s"),
         ]);
+
+        $this->load->library("emailer");
+        $this->emailer->sendmail("tanjingyi94@gmail.com", "Jannie Tan", "Someone apply your album", "Hi Administrator, <br/> Please check it out, someone has applied your album <br/><br/>Send from W0208");
+
         redirect(base_url('thanks'));
     }
 
