@@ -22,4 +22,9 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 	}
+
+	public function angularjs_practice()
+	{
+		$this->load->view('angularjs_practice');
+	}
 }
