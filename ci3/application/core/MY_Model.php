@@ -47,6 +47,7 @@
         public function insert($data_sql){
            
             $this->db->insert($this->table_name,$data_sql);
+            return $this->db->insert_id();
         }
 
         // to get multiple data
