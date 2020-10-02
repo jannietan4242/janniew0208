@@ -17,7 +17,7 @@ class Api_event_manage extends CI_Controller {
             $event_id = $this->Eventbackup_model->insert([
                 'eventList' => $eventList,
                 'profile' => $profile,
-                'created_date' => daste("Y-m-d H:i:s"),
+                'created_date' => date("Y-m-d H:i:s"),
             ]);
 
             echo json_encode([
